@@ -1,0 +1,16 @@
+.section-body {
+  .section-customize {
+    cursor: pointer;
+    overflow: hidden;
+
+    .customize-border {
+      overflow: hidden;
+      .doctor {
+        transition: all 0.3s;
+      }
+      &:hover .doctor {
+        transform: scale(1.1, 1.1);
+      }
+    }
+  }
+}

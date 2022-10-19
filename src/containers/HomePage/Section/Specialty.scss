@@ -1,0 +1,24 @@
+.section-body {
+  .section-customize {
+    cursor: pointer;
+
+    &:hover .specialty-name {
+      color: #45c3d2;
+    }
+    .specialty-name {
+      padding: 10px 0;
+      text-align: center;
+    }
+    .bg-image {
+      overflow: hidden;
+
+      img {
+        transition: all 0.5s;
+      }
+      &:hover img {
+        transform: scale(1.2, 1.2);
+        overflow: hidden;
+      }
+    }
+  }
+}
