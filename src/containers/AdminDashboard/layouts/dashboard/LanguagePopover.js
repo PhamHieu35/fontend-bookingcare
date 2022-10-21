@@ -16,7 +16,7 @@ import MenuPopover from "../../components/MenuPopover";
 const LANGS = [
   {
     value: "us",
-    label: "English1",
+    label: "English",
     icon: "/static/icons/ic_flag_us.svg",
   },
   {

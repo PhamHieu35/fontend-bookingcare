@@ -17,14 +17,14 @@ class HomeHeader extends Component {
     super();
 
     this.state = {
-      showMenuSearchSpecialty: false,
+      // showMenuSearchSpecialty: false,
     };
   }
-  handleClickShowHomeMenuSearchSpecialty = () => {
-    this.setState({
-      showMenuSearchSpecialty: !this.state.showMenuSearchSpecialty,
-    });
-  };
+  // handleClickShowHomeMenuSearchSpecialty = () => {
+  //   this.setState({
+  //     showMenuSearchSpecialty: !this.state.showMenuSearchSpecialty,
+  //   });
+  // };
 
   changeLanguage = (language) => {
     this.props.changeLanguageAppRedux(language);
@@ -155,7 +155,7 @@ class HomeHeader extends Component {
               <div className="title2">
                 <FormattedMessage id="banner.title2" />
               </div>
-              <div
+              {/* <div
                 className="search"
                 onClick={() => this.handleClickShowHomeMenuSearchSpecialty()}
               >
@@ -171,6 +171,9 @@ class HomeHeader extends Component {
                     showMenuSearchSpecialty={this.state.showMenuSearchSpecialty}
                   />
                 )}
+              </div> */}
+              <div>
+                <HomeMenuSearchSpecialty />
               </div>
             </div>
             <div className="content-down">

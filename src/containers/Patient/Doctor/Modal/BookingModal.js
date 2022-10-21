@@ -148,7 +148,7 @@ class BookingModal extends Component {
     return "";
   };
   handleConfirmBooking = async () => {
-
+    const { clearTime } = this.props
     this.setState({ isShowLoading: true });
 
     //validate input
@@ -177,12 +177,13 @@ class BookingModal extends Component {
       doctorName: doctorName,
     });
 
-
+    console.log('check res booking >>', res)
 
     if (res && res.errCode === 0) {
       this.setState({ isShowLoading: false });
       toast.success("Booking a new appointment succeed!");
       this.props.closeBookingClose();
+      clearTime(this.state.timeType)
     } else (
       this.setState({ isShowLoading: true })
     )

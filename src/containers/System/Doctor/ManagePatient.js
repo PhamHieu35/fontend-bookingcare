@@ -168,7 +168,7 @@ class ManagePatient extends Component {
       this.props.user.Doctor_Infor.priceTypeData &&
       this.props.user.Doctor_Infor.priceTypeData.valueEn
     ) {
-      totalCostData = this.props.user.Doctor_Infor.priceTypeData.valueEn;
+      totalCostData = this.props.user.Doctor_Infor.priceTypeData.valueVi;
     }
     if (
       this.props.user &&

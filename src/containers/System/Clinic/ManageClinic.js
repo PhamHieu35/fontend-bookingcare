@@ -145,16 +145,14 @@ class ManageClinic extends Component {
       address = res.data.address;
       descriptionHTML = res.data.descriptionHTML;
       descriptionMarkdown = res.data.descriptionMarkdown;
-      // previewImgURL = res.data.image
-      imageBase64 = res.data.image
 
       this.setState({
         name: name,
         address: address,
         descriptionHTML: descriptionHTML,
         descriptionMarkdown: descriptionMarkdown,
-        imageBase64: imageBase64,
         previewImgURL: previewImgURL,
+        imageBase64: previewImgURL,
         hasOldData: true
       })
     }
@@ -245,6 +243,12 @@ class ManageClinic extends Component {
 
           </div>
         </div>
+        {this.state.isOpen === true && (
+          <Lightbox
+            mainSrc={this.state.previewImgURL}
+            onCloseRequest={() => this.setState({ isOpen: false })}
+          />
+        )}
       </div>
     );
   }

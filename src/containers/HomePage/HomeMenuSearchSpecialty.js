@@ -1,58 +1,15 @@
 import React from "react";
-import IconButton from "@material-ui/core/IconButton";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
 import { useHistory } from "react-router-dom";
-
-import { makeStyles } from "@material-ui/core/styles";
-import { emitter } from "../../utils/emitter";
-
-import { useState, useEffect } from "react";
-
 import { getAllSpecialty } from "../../services/userService";
-
-var options = [];
-
-const ITEM_HEIGHT = 48;
-
-const useStyles = makeStyles((theme) => ({
-  menuSpecialty: {
-    position: "absolute !important",
-    top: "270px !important",
-    left: "460px !important",
-  },
-  titleHeader: {
-    fontWeight: "600 !important",
-    backgroundColor: "#ebebeb !important",
-    marginTop: "-7px !important",
-  },
-}));
+import './HomeMenuSearchSpecialty.scss'
+import { FormattedMessage } from "react-intl";
+import { useEffect } from "react";
+import { useState } from "react";
 
 const HomeMenuSearchSpecialty = (props) => {
   let history = useHistory();
-  const classes = useStyles();
-  //   const [anchorEl, setAnchorEl] = React.useState(null);
-  //   const open = Boolean(anchorEl);
-  const [open, setOpen] = useState(false);
-  const [dataSpecialty, setDataSpecialty] = useState([]);
-
-  const handleClick = (event) => {
-    // setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    // setAnchorEl(null);
-    setOpen(false);
-  };
-
-  //   function listenToEmitter() {
-  //     emitter.on("EVENT_OPEN_MENU_HOME_MENU_SEARCH_SPECIALTY", () => {
-  //       alert("Clicked from child");
-  //       //   open = true;
-  //       //   console.log("open", open);
-  //     });
-  //   }
+  const [dataSpecialty, setDataSpecialty] = useState([])
+  const [filterData, setFilterData] = useState([])
 
   useEffect(() => {
     const fetchDataGetAllSpecialty = async () => {
@@ -65,15 +22,6 @@ const HomeMenuSearchSpecialty = (props) => {
     };
     fetchDataGetAllSpecialty();
   }, []);
-
-  const makeArraySpecityOptions = () => {
-    options = [];
-    dataSpecialty.map((item) => options.push(item.name));
-  };
-
-  useEffect(() => {
-    setOpen(props.showMenuSearchSpecialty);
-  }, [props.showMenuSearchSpecialty]);
 
   const findIdSpecialtyByName = (itemName) => {
 
@@ -89,37 +37,48 @@ const HomeMenuSearchSpecialty = (props) => {
     if (history) {
       history.push(`/detail-specialty/${id}`);
     }
-    setOpen(true);
   };
 
-  makeArraySpecityOptions();
-  return (
-    <Menu
-      id="long-menu"
-      // anchorEl={anchorEl}
-      keepMounted
-      open={open}
-      onClose={handleClose}
-      anchorReference="none"
-      PaperProps={{
-        style: {
-          maxHeight: ITEM_HEIGHT * 7,
-          width: "58ch",
-        },
-      }}
-      className={classes.menuSpecialty}
-    >
-      <MenuItem key={"specialty"} className={classes.titleHeader}>
-        Chuyên khoa
-      </MenuItem>
+  const handleFilter = (event) => {
+    console.log('check onchange input >>', event.target.value)
+    const searchWord = event.target.value;
+    const newFilter = dataSpecialty.filter((value) => {
+      return value.name.toLowerCase().includes(searchWord.toLowerCase());
+    });
 
-      {options.map((option) => (
-        <MenuItem key={option} onClick={handleViewDetail(option)}>
-          {option}
-        </MenuItem>
-      ))}
-    </Menu>
-  );
-};
+    if (searchWord === '') {
+      setFilterData([])
+    } else {
+      setFilterData(newFilter)
+    }
+
+  }
+
+
+  console.log('check filter data', filterData)
+  return (
+    <>
+      <div className="search">
+        <i className="fas fa-search"></i>
+        <FormattedMessage id="banner.search">
+          {(placeholder) => (
+            <input type="text" placeholder={placeholder} onChange={handleFilter} />
+          )}
+        </FormattedMessage>
+
+      </div>
+
+      {filterData.length !== 0 &&
+        <div className="dataResult">
+          {filterData.map((option, idx) => {
+            return <a key={option.id} onClick={handleViewDetail(option.name)}>{option.name}</a>
+          })
+          }
+        </div>
+      }
+
+    </>
+  )
+}
 
 export default HomeMenuSearchSpecialty;

@@ -10,6 +10,8 @@ import { createNewSpecialty, getAllSpecialtyInfo } from "../../../services/userS
 import { toast } from "react-toastify";
 import Select from 'react-select';
 import * as actions from "../../../store/actions";
+import Lightbox from "react-image-lightbox";
+import "react-image-lightbox/style.css";
 
 const mdParser = new MarkdownIt(/* Markdown-it options */);
 
@@ -24,6 +26,7 @@ class ManageSpecialty extends Component {
       listSpecialty: [],
       selectedOption: '',
       hasOldData: false,
+      previewImgURL: "",
     };
   }
 
@@ -79,8 +82,9 @@ class ManageSpecialty extends Component {
     let file = data[0];
     if (file) {
       let base64 = await CommonUtils.getBase64(file);
-
+      let objectUrl = URL.createObjectURL(file);
       this.setState({
+        previewImgURL: objectUrl,
         imageBase64: base64,
       });
     }
@@ -110,6 +114,13 @@ class ManageSpecialty extends Component {
     }
   };
 
+  openPreviewImage = () => {
+    if (!this.state.previewImgURL) return;
+    this.setState({
+      isOpen: true,
+    });
+  };
+
   handleChange = async (selectedOption) => {
     this.setState({ selectedOption });
 
@@ -118,19 +129,24 @@ class ManageSpecialty extends Component {
     let name = '',
       descriptionHTML = '',
       descriptionMarkdown = '',
+      previewImgURL = '',
       imageBase64 = '';
     if (res && res.data) {
+      if (res.data.image) {
+        previewImgURL = new Buffer(res.data.image, "base64").toString("binary");
+      }
       name = res.data.name;
       descriptionHTML = res.data.descriptionHTML;
       descriptionMarkdown = res.data.descriptionMarkdown;
 
-      imageBase64 = res.data.image
+      // imageBase64 = res.data.image
 
       this.setState({
         name: name,
         descriptionHTML: descriptionHTML,
         descriptionMarkdown: descriptionMarkdown,
-        imageBase64: imageBase64,
+        previewImgURL: previewImgURL,
+        imageBase64: previewImgURL,
         hasOldData: true
       })
     }
@@ -171,6 +187,13 @@ class ManageSpecialty extends Component {
               type="file"
               onChange={(event) => this.handleOnChangeImage(event)}
             />
+            <div
+              className="preview-image"
+              style={{
+                backgroundImage: `url(${this.state.previewImgURL})`,
+              }}
+              onClick={() => this.openPreviewImage()}
+            ></div>
           </div>
           <div className="col-12">
             <MdEditor
@@ -198,6 +221,12 @@ class ManageSpecialty extends Component {
             }
           </div>
         </div>
+        {this.state.isOpen === true && (
+          <Lightbox
+            mainSrc={this.state.previewImgURL}
+            onCloseRequest={() => this.setState({ isOpen: false })}
+          />
+        )}
       </div>
     );
   }

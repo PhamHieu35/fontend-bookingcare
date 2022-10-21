@@ -19,6 +19,7 @@ class DoctorSchedule extends Component {
       allAvailableTime: [],
       isOpenModalBooking: false,
       dataScheduleTimeModal: {},
+      filterTime: []
     };
   }
 
@@ -140,12 +141,32 @@ class DoctorSchedule extends Component {
       isOpenModalBooking: false,
     });
   };
+
+  handleClearTime = (dataTime) => {
+    let cloneTime = { ...this.state.allAvailableTime }
+    // let cloneTime = { ...this.state.allAvailableTime };
+    if (dataTime) {
+      cloneTime = this.state.allAvailableTime((item) => item.timeType !== dataTime)
+      // this.state.allAvailableTime.push(cloneTime)
+      this.setState({
+        allAvailableTime: cloneTime
+      })
+      console.log('check data time1 >>', cloneTime)
+    }
+
+
+    console.log('check time child >>', dataTime)
+  }
+
+
   render() {
+    console.log('check time doctor>>>.', this.state.allAvailableTime)
     let {
       allDays,
       allAvailableTime,
       isOpenModalBooking,
       dataScheduleTimeModal,
+      filterTime
     } = this.state;
     let { language } = this.props;
 
@@ -218,6 +239,7 @@ class DoctorSchedule extends Component {
           isOpenModal={isOpenModalBooking}
           closeBookingClose={this.closeBookingClose}
           dataTime={dataScheduleTimeModal}
+          clearTime={this.handleClearTime}
         />
       </>
     );
